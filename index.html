@@ -1,40 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DataMatrix Generator</title>
 <script src="https://unpkg.com/bwip-js/dist/bwip-js-min.js"></script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 16px;
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+    .field {
+        margin-bottom: 16px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 0.95rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+
+    .barcode-wrapper {
+        margin-top: 20px;
+        text-align: center;
+        overflow-x: auto;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        background: #fff;
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    .info {
+        margin-top: 16px;
+        font-size: 0.9rem;
+        color: #555;
+        word-break: break-word;
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+        }
+
+        input,
+        button {
+            font-size: 16px;
+        }
+    }
+</style>
 </head>
 
 <body>
 
-<h2>Générateur DataMatrix</h2>
+<div class="container">
+    <h2>Générateur DataMatrix</h2>
 
-<label>Date :</label>
-<input type="text" id="date" value="30 04 2026"><br><br>
+    <div class="field">
+        <label for="date">Date :</label>
+        <input type="text" id="date" value="30 04 2026">
+    </div>
 
-<label>Numéro :</label>
-<input type="text" id="serial" value="234792"><br><br>
+    <div class="field">
+        <label for="serial">Numéro :</label>
+        <input type="text" id="serial" value="234792">
+    </div>
 
-<button onclick="generate()">Générer</button>
+    <button onclick="generate()">Générer</button>
 
-<br><br>
-<canvas id="barcode"></canvas>
+    <div class="barcode-wrapper">
+        <canvas id="barcode"></canvas>
+    </div>
+
+    <div class="info" id="rawtext"></div>
+</div>
 
 <script>
 function generate() {
-
     let date = document.getElementById("date").value;
     let serial = document.getElementById("serial").value;
 
-    let text =
-"55058699    \tL3896\r\n;100;10;500L;A;30 04 2026;234792";
+    let text = "55058699    \tL3896\r\n;100;10;500L;A;" + date + ";" + serial;
 
     bwipjs.toCanvas('barcode', {
-        bcid:        'datamatrix',
-        text:        text,
-        scale:       4
+        bcid: 'datamatrix',
+        text: text,
+        scale: 4,
+        paddingwidth: 10,
+        paddingheight: 10
     });
+
+    document.getElementById("rawtext").textContent =
+        "Chaîne encodée : 55058699    \\tL3896\\r\\n;100;10;500L;A;" + date + ";" + serial;
 }
 
 generate();
