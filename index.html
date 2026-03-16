@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DataMatrix Generator</title>
+<script src="https://unpkg.com/bwip-js/dist/bwip-js-min.js"></script>
+</head>
+
+<body>
+
+<h2>Générateur DataMatrix</h2>
+
+<label>Date :</label>
+<input type="text" id="date" value="30 04 2026"><br><br>
+
+<label>Numéro :</label>
+<input type="text" id="serial" value="234792"><br><br>
+
+<button onclick="generate()">Générer</button>
+
+<br><br>
+<canvas id="barcode"></canvas>
+
+<script>
+function generate() {
+
+    let date = document.getElementById("date").value;
+    let serial = document.getElementById("serial").value;
+
+    let text =
+"55058699    \tL3896\r\n;100;10;500L;A;30 04 2026;234792";
+
+    bwipjs.toCanvas('barcode', {
+        bcid:        'datamatrix',
+        text:        text,
+        scale:       4
+    });
+}
+
+generate();
+</script>
+
+</body>
+</html>
